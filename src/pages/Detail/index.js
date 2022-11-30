@@ -7,30 +7,29 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import {dataRef} from '../../config/FIREBASE';
 import moment from 'moment';
 import 'moment/locale/id';
 import {Alert} from '@coreui/coreui';
 import {loadOptions} from '@babel/core';
 export default function Detail({navigation, route}) {
-  const {key, fullname, mesin, merek, rerata, date} = route.params;
-  const [keyUbah, setKey] = useState(key);
+  const {id, fullname, mesin, merek, rerata, tanggal} = route.params;
+  const [keyUbah, setKey] = useState(id);
   const [dfullname, setfullname] = useState(fullname);
   const [dmesin, setValue] = useState(mesin);
   const [dmerek, setmerek] = useState(merek);
   const [drerata, setrerata] = useState(rerata);
   const [ddate, setDate] = useState(new Date());
-  const [text, setText] = useState(date);
+  const [text, setText] = useState(tanggal);
 
   if (rerata <= 13) {
-    ket = 'masih sehat';
+    ket = 'Kondisi Mesin Aman';
   } else {
-    ket = 'servis bro';
+    ket = 'Mesin Perlu di-Service';
   }
 
   const dString = text;
   const days = 30;
-  let [day, month, year] = dString.split('/');
+  let [year, month, day] = dString.split('-');
   // month - 1 as month in the Date constructor is zero indexed
 
   const now = new Date(year, month - 1, day);

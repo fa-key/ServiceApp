@@ -10,18 +10,15 @@ import {
 } from 'react-native';
 import {style} from './style';
 
-export class Transport extends Component {
+export class Bill extends Component {
   constructor(props) {
     super(props);
     this.state = {
       nama: '',
-      merek: '',
-      tanggal: '',
-      rerata: '',
+      harga: '',
       listData: [],
-      idEdit: null,
     };
-    this.url = 'http://192.168.1.13:7070/apic/api.php';
+    this.url = 'http://192.168.1.13:7070/apic/api.php/?op=readCost';
   }
   componentDidMount() {
     this.getListData();
@@ -38,8 +35,8 @@ export class Transport extends Component {
       });
   }
 
-  async klikDelete(id) {
-    await fetch(this.url + '/?op=delete&id=' + id)
+  async klikDeleteCost(id) {
+    await fetch('http://192.168.1.13:7070/apic/api.php/?op=deleteCost&id=' + id)
       .then(response => response.json())
       .then(json => {
         alert('Data Berhasil Dihapus');
@@ -51,25 +48,12 @@ export class Transport extends Component {
   }
 
   async sendData(val) {
-    this.props.navigation.navigate('MyStack', {
-      screen: 'Edit',
+    this.props.navigation.navigate('Update', {
+      screen: 'EditBill',
       params: {
         id: val.id,
         nama: val.nama,
-        merek: val.merek,
-        mesin: val.mesin,
-        tanggal: val.tanggal,
-        rerata: val.rerata,
-      },
-    });
-  }
-
-  async sendNama(val) {
-    this.props.navigation.navigate('Biaya', {
-      screen: 'Cost',
-      params: {
-        id: val.id,
-        nama: val.nama,
+        harga: val.harga,
       },
     });
   }
@@ -78,18 +62,18 @@ export class Transport extends Component {
     return (
       <ScrollView style={style.scrollContainer}>
         <View style={style.container}>
-          <Text style={style.companyName}>Profile</Text>
+          <Text style={style.companyName}>Service Cost</Text>
           <View style={style.notificationList}>
             {this.state.listData.map((val, index) => (
               <View style={style.notificationList} key={index}>
                 <View style={style.notificationBox}>
                   <Text style={style.name}>{val.nama}</Text>
                   <TouchableOpacity style={style.btnColor}>
-                    <Text style={style.name}>{val.merek}</Text>
+                    <Text style={style.name}>{val.harga}</Text>
                   </TouchableOpacity>
-
                   <View style={style.icons}>
-                    <TouchableOpacity onPress={() => this.klikDelete(val.id)}>
+                    <TouchableOpacity
+                      onPress={() => this.klikDeleteCost(val.id)}>
                       <Image
                         style={style.icon}
                         source={{
@@ -105,14 +89,6 @@ export class Transport extends Component {
                         }}
                       />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.sendNama(val)}>
-                      <Image
-                        style={style.icon}
-                        source={{
-                          uri: 'https://img.icons8.com/plasticine/100/null/invoice-1.png',
-                        }}
-                      />
-                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -124,4 +100,4 @@ export class Transport extends Component {
   }
 }
 
-export default Transport;
+export default Bill;

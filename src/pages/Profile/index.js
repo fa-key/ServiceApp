@@ -31,12 +31,51 @@ export default function Profile({navigation, route}) {
       merek: merek,
       rerata: rerata,
       mesin: mesin,
-      date: text
+      date: text,
     };
     const ref = dataRef.push(newInput);
     const key = ref.key;
     dataRef.child(key).update({key: key});
     navigation.navigate('Front');
+    this.url = 'http://192.168.1.13:7070/apic/api.php';
+    if (
+      fullname == '' ||
+      merek == '' ||
+      mesin == '' ||
+      text == '' ||
+      rerata == ''
+    ) {
+      alert('Isi Dengan Lengkap');
+    } else {
+      var urlAksi = this.url + '/?op=create';
+      fetch(urlAksi, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body:
+          'nama=' +
+          fullname +
+          '&merek=' +
+          merek +
+          '&mesin=' +
+          mesin +
+          '&tanggal=' +
+          text +
+          '&rerata=' +
+          rerata,
+      })
+        .then(response => response.json())
+        .then(json => {
+          this.setState({fullname: ''});
+          this.setState({merek: ''});
+          this.setState({mesin: ''});
+          this.setState({tanggal: ''});
+          this.setState({rerata: ''});
+          this.getListData();
+        });
+      alert('Data Berhasil Dimasukkan');
+    }
   };
 
   const onChange = (event, selectedDate) => {
@@ -47,12 +86,11 @@ export default function Profile({navigation, route}) {
 
     let tempDate = new Date(currentDate);
     let fDate =
-      tempDate.getDate() +
+      tempDate.getFullYear() +
       '/' +
       (tempDate.getMonth() + 1) +
       '/' +
-      tempDate.getFullYear();
-
+      tempDate.getDate();
     setText(fDate);
 
     console.log(fDate);
@@ -87,7 +125,9 @@ export default function Profile({navigation, route}) {
       <View style={styles.inputContainer}>
         <Image
           style={styles.inputIcon}
-          source={{uri: 'https://img.icons8.com/external-filled-outline-icons-maxicons/85/000000/external-motor-transport-filled-outline-filled-outline-icons-maxicons.png'}}
+          source={{
+            uri: 'https://img.icons8.com/external-filled-outline-icons-maxicons/85/000000/external-motor-transport-filled-outline-filled-outline-icons-maxicons.png',
+          }}
         />
         <TextInput
           style={styles.inputs}

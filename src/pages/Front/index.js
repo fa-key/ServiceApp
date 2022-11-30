@@ -8,6 +8,21 @@ import {
   FlatList,
 } from 'react-native';
 
+import * as firebase from 'firebase';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyBj1-JJeEoJLwYpIEXEOjvF-1Z6DHkupjo',
+  authDomain: 'serviceapp-b95f9.firebaseapp.com',
+  databaseURL: 'https://serviceapp-b95f9-default-rtdb.firebaseio.com',
+  projectId: 'serviceapp-b95f9',
+  storageBucket: 'serviceapp-b95f9.appspot.com',
+  messagingSenderId: '634733488189',
+  appId: '1:634733488189:web:c026847aeb2514e44a2254',
+};
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 export default class Front extends Component {
   constructor(props) {
     super(props);
@@ -37,12 +52,33 @@ export default class Front extends Component {
           color: '#91A8D0',
           image: 'https://img.icons8.com/color/48/000000/maintenance.png',
         },
+        {
+          id: 5,
+          title: 'Bill',
+          color: '#A660A2',
+          image: 'https://img.icons8.com/dusk/64/null/tip.png',
+        },
+        {
+          id: 6,
+          title: 'Logout',
+          color: '#91A8D0',
+          image: 'https://img.icons8.com/arcade/64/null/exit.png',
+        },
       ],
     };
   }
 
   clickEventListener(item) {
-    this.props.navigation.navigate(item.title)
+    this.props.navigation.navigate(item.title);
+    if (item.title == 'Logout') {
+      try {
+        firebase.auth().signOut();
+
+        this.props.navigation.navigate('SignIn');
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 
   render() {
@@ -62,7 +98,9 @@ export default class Front extends Component {
               <View>
                 <TouchableOpacity
                   style={[styles.card, {backgroundColor: item.color}]}
-                  onPress={() => {this.clickEventListener(item)}}>
+                  onPress={() => {
+                    this.clickEventListener(item);
+                  }}>
                   <Image style={styles.cardImage} source={{uri: item.image}} />
                 </TouchableOpacity>
 
@@ -86,7 +124,6 @@ export default class Front extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
     backgroundColor: '#fff',
   },
   list: {
