@@ -17,7 +17,7 @@ export default function EditBill({navigation, route}) {
   const [dharga, setharga] = useState(harga);
 
   const ubahData = keyUbah => {
-    this.url = 'http://192.168.1.13:7070/apic/api.php';
+    this.url = 'http://1.192.168.13:7070/apic/api.php';
     var urlAksi = this.url + '/?op=updateCost&id=' + keyUbah;
     fetch(urlAksi, {
       method: 'POST',
